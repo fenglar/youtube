@@ -1,13 +1,23 @@
 package pl.marcin.youtube.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.marcin.youtube.model.Video;
+import pl.marcin.youtube.repository.VideoRepository;
 
 @Service
+@RequiredArgsConstructor
 public class VideoService {
 
-    public void uploadVideo(MultipartFile multipartFile){
-        // upload file to AWS s3
-        // save video data to database
+    private final S3Service s3Service;
+    private final VideoRepository videoRepository;
+
+    public void uploadVideo(MultipartFile multipartFile) {
+        String videoUrl = s3Service.uploadFile(multipartFile);
+        var video = new Video();
+        video.setVideoUrl(videoUrl);
+
+        videoRepository.save(video);
     }
 }
