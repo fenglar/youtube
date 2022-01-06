@@ -17,7 +17,6 @@ public class VideoService {
         String videoUrl = s3Service.uploadFile(multipartFile);
         var video = new Video();
         video.setVideoUrl(videoUrl);
-
         videoRepository.save(video);
     }
 }

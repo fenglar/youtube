@@ -1,5 +1,6 @@
 package pl.marcin.youtube.service;
 
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -23,11 +24,9 @@ public class S3Service implements FileService {
 
     @Override
     public String uploadFile(MultipartFile file) {
-        //upload file to aws s3
 
-        //prepare a key
         var filenameExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        var key = UUID.randomUUID().toString() + filenameExtension;
+        var key = UUID.randomUUID().toString() + "." + filenameExtension;
 
         var metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
@@ -38,9 +37,7 @@ public class S3Service implements FileService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "An exception occured while uploading a file");
         }
-
         awsS3Client.setObjectAcl(YOUTUBE_DEMO, key, CannedAccessControlList.PublicRead);
         return awsS3Client.getResourceUrl(YOUTUBE_DEMO, key);
     }
-
 }
